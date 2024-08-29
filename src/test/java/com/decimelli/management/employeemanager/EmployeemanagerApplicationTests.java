@@ -1,5 +1,6 @@
 package com.decimelli.management.employeemanager;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
@@ -81,8 +82,9 @@ class EmployeemanagerApplicationTests {
 		employeeService.setNewSalary(employee, 50000, dateOfPromotion);
 		employeeService.setNewTitle(employee, "Software Development Manager", dateOfPromotion);
 
-		assertFalse(managements.getDepartmentManagerHistory(department).isEmpty());
-		assertFalse(managements.getManagedDepartmentHistory(employee).isEmpty());
+		assertEquals(
+				managements.getDepartmentManagerHistory(department).isEmpty(),
+				managements.getManagedDepartmentHistory(employee).isEmpty());
 
 		// 5. Employee retires
 
@@ -97,50 +99,52 @@ class EmployeemanagerApplicationTests {
 
 		/**
 		 * The full employee object should look something like this:
-			Employee(
-				id=10192459, 
-				birthDate=1977-01-29, 
-				firstName=Stefan, 
-				lastName=Decimelli, 
-				gender=M, 
-				hireDate=1999-01-02, 
-				salaryHistory=[
-					Salary(
-						salary=50000, 
-						fromDate=2004-07-07, 
-						toDate=2024-08-29
-					), 
-					Salary(
-						salary=40000, 
-						fromDate=1999-01-02, 
-						toDate=2004-07-07
-					)
-				], 
-				titleHistory=[
-					Title(
-						title=Software Developer, 
-						fromDate=1999-01-02, 
-						toDate=2004-07-07
-					), 
-					Title(
-						title=Software Development Manager, 
-						fromDate=2004-07-07, 
-						toDate=2024-08-29
-					)
-				], 
-				departmentHistory=[
-					(
-						department=R&D, 
-						fromDate=2004-07-07, 
-						toDate=2024-08-29
-					),
-					(
-						department=Software Development, 
-						fromDate=1999-01-02, 
-						toDate=2004-07-07
-					)
-				]
-			)
+		 * 
+		 * Employee(
+		 * id=10192459,
+		 * birthDate=1977-01-29,
+		 * firstName=Stefan,
+		 * lastName=Decimelli,
+		 * gender=M,
+		 * hireDate=1999-01-02,
+		 * salaryHistory=[
+		 * Salary(
+		 * salary=50000,
+		 * fromDate=2004-07-07,
+		 * toDate=2024-08-29
+		 * ),
+		 * Salary(
+		 * salary=40000,
+		 * fromDate=1999-01-02,
+		 * toDate=2004-07-07
+		 * )
+		 * ],
+		 * titleHistory=[
+		 * Title(
+		 * title=Software Developer,
+		 * fromDate=1999-01-02,
+		 * toDate=2004-07-07
+		 * ),
+		 * Title(
+		 * title=Software Development Manager,
+		 * fromDate=2004-07-07,
+		 * toDate=2024-08-29
+		 * )
+		 * ],
+		 * departmentHistory=[
+		 * (
+		 * department=R&D,
+		 * fromDate=2004-07-07,
+		 * toDate=2024-08-29
+		 * ),
+		 * (
+		 * department=Software Development,
+		 * fromDate=1999-01-02,
+		 * toDate=2004-07-07
+		 * )
+		 * ]
+		 * )
+		 * 
 		 */
 	}
 }

@@ -7,11 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 
-import com.decimelli.management.employeemanager.model.Department;
-import com.decimelli.management.employeemanager.model.DepartmentAssignment;
 import com.decimelli.management.employeemanager.model.Employee;
-import com.decimelli.management.employeemanager.model.Salary;
-import com.decimelli.management.employeemanager.model.Title;
 import com.decimelli.management.employeemanager.service.ManagerService;
 import com.decimelli.management.employeemanager.service.EmployeeService;
 
@@ -25,19 +21,13 @@ public class EmployeeRepositoryTest {
 	SalaryRepository salaries;
 
 	@Autowired
-	DepartmentRepository departments;
-
-	@Autowired
-	DepartmentAssignmentRepository assignments;
-
-	@Autowired
 	ManagerService managements;
 
 	@Autowired
 	EmployeeService employeeService;
 
 	@Test
-	void createEmployeeThenSalary() {
+	void createEmployee() {
 		Employee employee = new Employee();
 		employee.setBirthDate(Date.valueOf("1997-1-29"));
 		employee.setFirstName("Stefan");
@@ -47,27 +37,6 @@ public class EmployeeRepositoryTest {
 		employee.setId(10192459);
 
 		employees.save(employee);
-
-		Salary salary = new Salary();
-		salary.setFromDate(Date.valueOf("2020-7-07"));
-		salary.setToDate(Date.valueOf("9999-1-1"));
-		salary.setSalary(9999);
-		salary.setEmployee(employee);
-
-		salaries.save(salary);
-	}
-
-	@Test
-	void createEmployeeWishSalary() {
-		Employee employee = new Employee();
-		employee.setBirthDate(Date.valueOf("1999-2-13"));
-		employee.setFirstName("Alex");
-		employee.setLastName("Decimelli");
-		employee.setGender('M');
-		employee.setHireDate(Date.valueOf("2020-7-07"));
-		employee.setId(20192459);
-
-		employeeService.setNewSalary(employee, 17_500, Date.valueOf("2020-7-07"), Date.valueOf("9999-1-1"));
 	}
 
 	@Test
@@ -97,7 +66,7 @@ public class EmployeeRepositoryTest {
 	@Test
 	void testEmployeeAddNewSalary() {
 		Employee employee = employees.getEmployeeByName("Stefan", "Decimelli", null).get(0);
-		employeeService.setNewSalary(employee, 40000, Date.valueOf("2024-08-28"), Date.valueOf("9999-1-1"));
+		employeeService.setNewSalary(employee, 40000, Date.valueOf("2024-08-28"));
 		employees.getEmployeeByName("Stefan", "Decimelli", null)
 				.forEach(System.out::println);
 	}
@@ -105,42 +74,9 @@ public class EmployeeRepositoryTest {
 	@Test
 	void testEmployeeAddNewTitle() {
 		Employee employee = employees.getEmployeeByName("Stefan", "Decimelli", null).get(0);
-		employeeService.setNewTitle(employee, "Software Engineer 2", Date.valueOf("2024-12-7"), Date.valueOf("9999-1-1"));
+		employeeService.setNewTitle(employee, "Software Developer", Date.valueOf("1999-01-02"));
+		employeeService.setNewTitle(employee, "Senior Software Engineer", Date.valueOf("2024-12-7"));
 		employees.getEmployeeByName("Stefan", "Decimelli", null)
-				.forEach(System.out::println);
-	}
-
-	@Test
-	void testEmployeeAddDepartment() {
-		Employee employee = employees.getEmployeeByName("Stefan", "Decimelli", null).get(0);
-		Department department = departments.findById("d004").get();
-
-		DepartmentAssignment assignment = new DepartmentAssignment();
-		assignment.setEmployee(employee);
-		assignment.setDepartment(department);
-		assignment.setFromDate(Date.valueOf("1999-01-01"));
-		assignment.setToDate(Date.valueOf("9999-1-1"));
-
-		assignments.save(assignment);
-	}
-
-	@Test
-	void assignManagement() {
-		Employee employee = employees.getEmployeeByName("Stefan", "Decimelli", null).get(0);
-		managements.makeAsManager(employee, Date.valueOf("1999-01-01"), Date.valueOf("9999-1-1"));
-	}
-
-	@Test
-	void getManagedDepartmentByDepartmentId() {
-		Department department = departments.findById("d004").get();
-		managements.getDepartmentManagerHistory(department)
-				.forEach(System.out::println);
-	}
-
-	@Test
-	void getManagedDepartmentByEmployeeId() {
-		Employee employee = employees.getEmployeeByName("Stefan", "Decimelli", null).get(0);
-		managements.getManagedDepartmentHistory(employee)
 				.forEach(System.out::println);
 	}
 

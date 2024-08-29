@@ -41,6 +41,10 @@ public class EmployeeService {
 		employees.save(employee);
 	}
 
+	public void setNewSalary(Employee employee, int newSalaryValue, Date startDate) {
+		setNewSalary(employee, newSalaryValue, startDate, Date.valueOf("9999-1-1"));
+	}
+
 	public void setNewSalary(Employee employee, int newSalaryValue, Date from, Date to) {
 		if (employee.getSalaryHistory() == null) {
 			employee.setSalaryHistory(new HashSet<>());
@@ -59,6 +63,10 @@ public class EmployeeService {
 
 		employee.getSalaryHistory().add(newSalary);
 		employees.save(employee);
+	}
+
+	public void setNewTitle(Employee employee, String newTitleName, Date startDate) {
+		setNewTitle(employee, newTitleName, startDate, Date.valueOf("9999-1-1"));
 	}
 
 	public void setNewTitle(Employee employee, String newTitleName, Date from, Date to) {

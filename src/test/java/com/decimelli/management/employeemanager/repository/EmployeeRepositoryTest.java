@@ -105,13 +105,9 @@ public class EmployeeRepositoryTest {
 	@Test
 	void testEmployeeAddNewTitle() {
 		Employee employee = employees.getEmployeeByName("Stefan", "Decimelli", null).get(0);
-		Title title = new Title();
-		title.setFromDate(Date.valueOf("2024-7-7"));
-		title.setToDate(Date.valueOf("9999-1-1"));
-		title.setTitle("Software Developer");
-
-		employee.addTitle(title);
-		employees.save(employee);
+		employeeService.setNewTitle(employee, "Software Engineer 2", Date.valueOf("2024-12-7"), Date.valueOf("9999-1-1"));
+		employees.getEmployeeByName("Stefan", "Decimelli", null)
+				.forEach(System.out::println);
 	}
 
 	@Test

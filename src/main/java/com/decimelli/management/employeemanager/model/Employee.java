@@ -63,23 +63,6 @@ public class Employee {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "employee", orphanRemoval = true, fetch = FetchType.EAGER)
 	private Set<Title> titleHistory;
 
-	public void addTitle(Title newTitle) {
-		if (newTitle != null) {
-			if (titleHistory == null) {
-				titleHistory = new HashSet<>();
-			}
-
-			for (Title oldTitle : titleHistory) {
-				if (oldTitle.getToDate().compareTo(newTitle.getFromDate()) > 0) {
-					oldTitle.setToDate(newTitle.getFromDate());
-				}
-			}
-
-			newTitle.setEmployee(this);
-			titleHistory.add(newTitle);
-		}
-	}
-
 	@Getter
 	@OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<DepartmentAssignment> departmentHistory = new ArrayList<>();

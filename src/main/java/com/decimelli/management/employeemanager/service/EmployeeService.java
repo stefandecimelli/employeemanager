@@ -44,19 +44,40 @@ public class EmployeeService {
 	public void setNewSalary(Employee employee, int newSalaryValue, Date from, Date to) {
 		if (employee.getSalaryHistory() == null) {
 			employee.setSalaryHistory(new HashSet<>());
-		} else {
-			for (Salary oldSalary : employee.getSalaryHistory()) {
-				if (oldSalary.getToDate().compareTo(from) > 0) {
-					oldSalary.setToDate(from);
-				}
-			}
 		}
 		Salary newSalary = new Salary();
 		newSalary.setFromDate(from);
 		newSalary.setToDate(to);
 		newSalary.setSalary(newSalaryValue);
 		newSalary.setEmployee(employee);
+
+		for (Salary oldSalary : employee.getSalaryHistory()) {
+			if (oldSalary.getToDate().compareTo(from) > 0) {
+				oldSalary.setToDate(from);
+			}
+		}
+
 		employee.getSalaryHistory().add(newSalary);
+		employees.save(employee);
+	}
+
+	public void setNewTitle(Employee employee, String newTitleName, Date from, Date to) {
+		if (employee.getTitleHistory() == null) {
+			employee.setTitleHistory(new HashSet<>());
+		}
+		Title newSalary = new Title();
+		newSalary.setFromDate(from);
+		newSalary.setToDate(to);
+		newSalary.setTitle(newTitleName);
+		newSalary.setEmployee(employee);
+
+		for (Title oldTitle : employee.getTitleHistory()) {
+			if (oldTitle.getToDate().compareTo(from) > 0) {
+				oldTitle.setToDate(from);
+			}
+		}
+
+		employee.getTitleHistory().add(newSalary);
 		employees.save(employee);
 	}
 

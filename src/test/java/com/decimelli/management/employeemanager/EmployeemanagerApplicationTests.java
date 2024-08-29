@@ -42,7 +42,7 @@ class EmployeemanagerApplicationTests {
 	DepartmentService departmentService;
 
 	@Test
-	public void testEmploteeLifecycle() {
+	public void testEmployeeLifecycle() {
 		Department department;
 		Employee employee;
 

@@ -58,23 +58,6 @@ public class Employee {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "employee", orphanRemoval = true, fetch = FetchType.EAGER)
 	private Set<Salary> salaryHistory;
 
-	public void addSalary(Salary newSalary) {
-		if (newSalary != null) {
-			if (salaryHistory == null) {
-				salaryHistory = new HashSet<>();
-			}
-
-			for (Salary oldSalary : salaryHistory) {
-				if (oldSalary.getToDate().compareTo(newSalary.getFromDate()) > 0) {
-					oldSalary.setToDate(newSalary.getFromDate());
-				}
-			}
-
-			newSalary.setEmployee(this);
-			salaryHistory.add(newSalary);
-		}
-	}
-
 	@Getter
 	@Setter
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "employee", orphanRemoval = true, fetch = FetchType.EAGER)

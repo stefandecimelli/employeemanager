@@ -13,7 +13,7 @@ import com.decimelli.management.employeemanager.model.Employee;
 import com.decimelli.management.employeemanager.model.Salary;
 import com.decimelli.management.employeemanager.model.Title;
 import com.decimelli.management.employeemanager.service.ManagerService;
-import com.decimelli.management.employeemanager.service.RetirementService;
+import com.decimelli.management.employeemanager.service.EmployeeService;
 
 @SpringBootTest
 public class EmployeeRepositoryTest {
@@ -34,7 +34,7 @@ public class EmployeeRepositoryTest {
 	ManagerService managements;
 
 	@Autowired
-	RetirementService retirement;
+	EmployeeService employeeService;
 
 	@Test
 	void createEmployeeThenSalary() {
@@ -67,13 +67,7 @@ public class EmployeeRepositoryTest {
 		employee.setHireDate(Date.valueOf("2020-7-07"));
 		employee.setId(20192459);
 
-		Salary salary = new Salary();
-		salary.setFromDate(Date.valueOf("2020-7-07"));
-		salary.setToDate(Date.valueOf("9999-1-1"));
-		salary.setSalary(17_500);
-
-		employee.addSalary(salary);
-		employees.save(employee);
+		employeeService.setNewSalary(employee, 17_500, Date.valueOf("2020-7-07"), Date.valueOf("9999-1-1"));
 	}
 
 	@Test
@@ -103,13 +97,9 @@ public class EmployeeRepositoryTest {
 	@Test
 	void testEmployeeAddNewSalary() {
 		Employee employee = employees.getEmployeeByName("Stefan", "Decimelli", null).get(0);
-		Salary salary = new Salary();
-		salary.setFromDate(Date.valueOf("2024-5-07"));
-		salary.setToDate(Date.valueOf("9999-1-1"));
-		salary.setSalary(35000);
-
-		employee.addSalary(salary);
-		employees.save(employee);
+		employeeService.setNewSalary(employee, 40000, Date.valueOf("2024-08-28"), Date.valueOf("9999-1-1"));
+		employees.getEmployeeByName("Stefan", "Decimelli", null)
+				.forEach(System.out::println);
 	}
 
 	@Test
@@ -161,7 +151,7 @@ public class EmployeeRepositoryTest {
 	@Test
 	void testRetireEmployee() {
 		Employee employee = employees.getEmployeeByName("Stefan", "Decimelli", null).get(0);
-		retirement.retireEmployee(employee, new Date(Calendar.getInstance().getTimeInMillis()));
+		employeeService.retireEmployee(employee, new Date(Calendar.getInstance().getTimeInMillis()));
 		employees.getEmployeeByName("Stefan", "Decimelli", null)
 				.forEach(System.out::println);
 	}

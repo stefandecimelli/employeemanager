@@ -1,6 +1,8 @@
 package com.decimelli.management.employeemanager.repository;
 
 import java.sql.Date;
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -8,9 +10,11 @@ import org.springframework.data.domain.PageRequest;
 
 import com.decimelli.management.employeemanager.model.Department;
 import com.decimelli.management.employeemanager.model.DepartmentAssignment;
+import com.decimelli.management.employeemanager.model.DepartmentManagement;
 import com.decimelli.management.employeemanager.model.Employee;
 import com.decimelli.management.employeemanager.model.Salary;
 import com.decimelli.management.employeemanager.model.Title;
+import com.decimelli.management.employeemanager.service.ManagerService;
 
 @SpringBootTest
 public class EmployeeRepositoryTest {
@@ -27,29 +31,8 @@ public class EmployeeRepositoryTest {
 	@Autowired
 	DepartmentAssignmentRepository assignments;
 
-	@Test
-	void testGetEmployeeByName() {
-		employees.getEmployeeByName("Stefan", "Decimelli", PageRequest.of(0, 20))
-				.forEach(System.out::println);
-	}
-
-	@Test
-	void testGetEmployeeByFirstName() {
-		employees.getEmployeeByName("Stefan", null, PageRequest.of(0, 20))
-				.forEach(System.out::println);
-	}
-
-	@Test
-	void testGetEmployeeByLasttName() {
-		employees.getEmployeeByName(null, "Decimelli", PageRequest.of(0, 20))
-				.forEach(System.out::println);
-	}
-
-	@Test
-	void testGetEmployeeHireData() {
-		employees.getEmployeeHireData("Stefan", "Decimelli", null)
-				.forEach(System.out::println);
-	}
+	@Autowired
+	ManagerService managements;
 
 	@Test
 	void createEmployeeThenSalary() {
@@ -92,11 +75,35 @@ public class EmployeeRepositoryTest {
 	}
 
 	@Test
+	void testGetEmployeeByName() {
+		employees.getEmployeeByName("Stefan", "Decimelli", PageRequest.of(0, 20))
+				.forEach(System.out::println);
+	}
+
+	@Test
+	void testGetEmployeeByFirstName() {
+		employees.getEmployeeByName("Stefan", null, PageRequest.of(0, 20))
+				.forEach(System.out::println);
+	}
+
+	@Test
+	void testGetEmployeeByLasttName() {
+		employees.getEmployeeByName(null, "Decimelli", PageRequest.of(0, 20))
+				.forEach(System.out::println);
+	}
+
+	@Test
+	void testGetEmployeeHireData() {
+		employees.getEmployeeHireData("Stefan", "Decimelli", null)
+				.forEach(System.out::println);
+	}
+
+	@Test
 	void testEmployeeAddNewSalary() {
-		Employee employee = employees.findById(20192459).get();
+		Employee employee = employees.getEmployeeByName("Alex", "Decimelli", null).get(0);
 		Salary salary = new Salary();
 		salary.setFromDate(Date.valueOf("2024-5-07"));
-		salary.setSalary(29000);
+		salary.setSalary(35000);
 
 		employee.addSalary(salary);
 		employees.save(employee);
@@ -104,7 +111,7 @@ public class EmployeeRepositoryTest {
 
 	@Test
 	void testEmployeeAddNewTitle() {
-		Employee employee = employees.findById(10192459).get();
+		Employee employee = employees.getEmployeeByName("Stefan", "Decimelli", null).get(0);
 		Title title = new Title();
 		title.setFromDate(Date.valueOf("2024-7-7"));
 		title.setTitle("Software Developer");
@@ -115,7 +122,7 @@ public class EmployeeRepositoryTest {
 
 	@Test
 	void testEmployeeAddDepartment() {
-		Employee employee = employees.findById(10192459).get();
+		Employee employee = employees.getEmployeeByName("Stefan", "Decimelli", null).get(0);
 		Department department = departments.findById("d004").get();
 
 		DepartmentAssignment assignment = new DepartmentAssignment();
@@ -125,6 +132,26 @@ public class EmployeeRepositoryTest {
 		assignment.setToDate(Date.valueOf("2001-01-01"));
 
 		assignments.save(assignment);
+	}
+
+	@Test
+	void assignManagement() {
+		Employee employee = employees.findById(10192459).get();
+		managements.makeAsManager(employee, Date.valueOf("1999-01-01"), Date.valueOf("2001-01-01"));
+	}
+
+	@Test
+	void getManagedDepartmentByDepartmentId() {
+		Department department = departments.findById("d004").get();
+		managements.getDepartmentManagerHistory(department)
+				.forEach(System.out::println);
+	}
+
+	@Test
+	void getManagedDepartmentByEmployeeId() {
+		Employee employee = employees.getEmployeeByName("Stefan", "Decimelli", null).get(0);
+		managements.getManagedDepartmentHistory(employee)
+				.forEach(System.out::println);
 	}
 
 }

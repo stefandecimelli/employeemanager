@@ -11,7 +11,6 @@ import jakarta.persistence.MapsId;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 @Entity
 @Table(name = "dept_emp")
@@ -46,7 +45,7 @@ public class DepartmentAssignment {
 
 	@Override
 	public String toString() {
-		return "DepartmentAssignment [department=" + department.getName() + ", fromDate=" + fromDate + ", toDate=" + toDate + "]";
+		return "(department=" + department.getName() + ", fromDate=" + fromDate + ", toDate=" + toDate + ")";
 	}
 
 }

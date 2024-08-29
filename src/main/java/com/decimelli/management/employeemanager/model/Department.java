@@ -30,7 +30,7 @@ public class Department {
 	private String name;
 
 	@Getter
-	@OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	private List<DepartmentAssignment> employeeHistory = new ArrayList<>();
 
 }

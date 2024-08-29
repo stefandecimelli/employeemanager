@@ -86,8 +86,9 @@ class EmployeemanagerApplicationTests {
 
 		// 5. Employee retires
 
+		Date retirementDate = Date.valueOf("2024-08-29");
 		employee = employees.getEmployeeByName("Stefan", "Decimelli", null).get(0);
-		employeeService.retireEmployee(employee, new Date(Calendar.getInstance().getTimeInMillis()));
+		employeeService.retireEmployee(employee, retirementDate);
 
 		// FINAL
 

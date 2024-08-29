@@ -3,7 +3,6 @@ package com.decimelli.management.employeemanager.model;
 import java.sql.Date;
 
 import jakarta.annotation.Nullable;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

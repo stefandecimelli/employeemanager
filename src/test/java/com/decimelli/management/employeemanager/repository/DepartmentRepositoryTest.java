@@ -1,7 +1,6 @@
 package com.decimelli.management.employeemanager.repository;
 
 import java.sql.Date;
-import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

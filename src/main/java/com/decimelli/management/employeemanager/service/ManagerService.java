@@ -39,4 +39,13 @@ public class ManagerService {
 		repository.save(management);
 	}
 
+	public void removeAsManager(Employee employee, Date lastDayAsManager) {
+		for (DepartmentManagement management : getManagedDepartmentHistory(employee)) {
+			if(management.getToDate().compareTo(lastDayAsManager) > 0) {
+				management.setToDate(lastDayAsManager);
+				repository.save(management);
+			}
+		}
+	}
+
 }

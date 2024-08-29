@@ -1,6 +1,7 @@
 package com.decimelli.management.employeemanager.repository;
 
 import java.sql.Date;
+import java.util.Calendar;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,7 @@ import com.decimelli.management.employeemanager.model.Employee;
 import com.decimelli.management.employeemanager.model.Salary;
 import com.decimelli.management.employeemanager.model.Title;
 import com.decimelli.management.employeemanager.service.ManagerService;
+import com.decimelli.management.employeemanager.service.RetirementService;
 
 @SpringBootTest
 public class EmployeeRepositoryTest {
@@ -33,6 +35,9 @@ public class EmployeeRepositoryTest {
 
 	@Autowired
 	ManagerService managements;
+
+	@Autowired
+	RetirementService retirement;
 
 	@Test
 	void createEmployeeThenSalary() {
@@ -100,9 +105,10 @@ public class EmployeeRepositoryTest {
 
 	@Test
 	void testEmployeeAddNewSalary() {
-		Employee employee = employees.getEmployeeByName("Alex", "Decimelli", null).get(0);
+		Employee employee = employees.getEmployeeByName("Stefan", "Decimelli", null).get(0);
 		Salary salary = new Salary();
 		salary.setFromDate(Date.valueOf("2024-5-07"));
+		salary.setToDate(Date.valueOf("9999-1-1"));
 		salary.setSalary(35000);
 
 		employee.addSalary(salary);
@@ -114,6 +120,7 @@ public class EmployeeRepositoryTest {
 		Employee employee = employees.getEmployeeByName("Stefan", "Decimelli", null).get(0);
 		Title title = new Title();
 		title.setFromDate(Date.valueOf("2024-7-7"));
+		title.setToDate(Date.valueOf("9999-1-1"));
 		title.setTitle("Software Developer");
 
 		employee.addTitle(title);
@@ -129,15 +136,15 @@ public class EmployeeRepositoryTest {
 		assignment.setEmployee(employee);
 		assignment.setDepartment(department);
 		assignment.setFromDate(Date.valueOf("1999-01-01"));
-		assignment.setToDate(Date.valueOf("2001-01-01"));
+		assignment.setToDate(Date.valueOf("9999-1-1"));
 
 		assignments.save(assignment);
 	}
 
 	@Test
 	void assignManagement() {
-		Employee employee = employees.findById(10192459).get();
-		managements.makeAsManager(employee, Date.valueOf("1999-01-01"), Date.valueOf("2001-01-01"));
+		Employee employee = employees.getEmployeeByName("Stefan", "Decimelli", null).get(0);
+		managements.makeAsManager(employee, Date.valueOf("1999-01-01"), Date.valueOf("9999-1-1"));
 	}
 
 	@Test
@@ -154,4 +161,11 @@ public class EmployeeRepositoryTest {
 				.forEach(System.out::println);
 	}
 
+	@Test
+	void testRetireEmployee() {
+		Employee employee = employees.getEmployeeByName("Stefan", "Decimelli", null).get(0);
+		retirement.retireEmployee(employee, new Date(Calendar.getInstance().getTimeInMillis()));
+		employees.getEmployeeByName("Stefan", "Decimelli", null)
+				.forEach(System.out::println);
+	}
 }

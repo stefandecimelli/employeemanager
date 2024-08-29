@@ -1,6 +1,7 @@
 package com.decimelli.management.employeemanager.service;
 
 import java.sql.Date;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,13 @@ public class DepartmentService {
 	public void createDepartment(String name) {
 		Department department = new Department();
 		department.setName(name);
+		department.setId(new Random().ints(48, 123)
+				.filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
+				.limit(4)
+				.collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+				.toString()
+				.toUpperCase());
+
 		repository.save(department);
 	}
 

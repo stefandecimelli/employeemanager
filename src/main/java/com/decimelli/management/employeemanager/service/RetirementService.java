@@ -5,9 +5,7 @@ import java.sql.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.decimelli.management.employeemanager.model.Department;
 import com.decimelli.management.employeemanager.model.DepartmentAssignment;
-import com.decimelli.management.employeemanager.model.DepartmentManagement;
 import com.decimelli.management.employeemanager.model.Employee;
 import com.decimelli.management.employeemanager.model.Salary;
 import com.decimelli.management.employeemanager.model.Title;

@@ -2,8 +2,6 @@ package com.decimelli.management.employeemanager.repository;
 
 import java.sql.Date;
 import java.util.Calendar;
-import java.util.List;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,7 +9,6 @@ import org.springframework.data.domain.PageRequest;
 
 import com.decimelli.management.employeemanager.model.Department;
 import com.decimelli.management.employeemanager.model.DepartmentAssignment;
-import com.decimelli.management.employeemanager.model.DepartmentManagement;
 import com.decimelli.management.employeemanager.model.Employee;
 import com.decimelli.management.employeemanager.model.Salary;
 import com.decimelli.management.employeemanager.model.Title;

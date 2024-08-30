@@ -13,6 +13,8 @@ import com.decimelli.management.employeemanager.model.Employee;
 import com.decimelli.management.employeemanager.repository.DepartmentAssignmentRepository;
 import com.decimelli.management.employeemanager.repository.DepartmentManagementRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class ManagerService {
 
@@ -37,6 +39,7 @@ public class ManagerService {
 		makeAsManager(employee, department, startDate, Date.valueOf("9999-1-1"));
 	}
 
+	@Transactional
 	public void makeAsManager(Employee employee, Department department, Date fromDate, Date toDate) {
 		for (DepartmentAssignment assignment : employee.getDepartmentHistory()) {
 			if (assignment.getToDate().compareTo(fromDate) > 0) {

@@ -3,14 +3,13 @@ package com.decimelli.management.employeemanager.model;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -54,16 +53,19 @@ public class Employee {
 
 	@Getter
 	@Setter
+	@OrderBy("fromDate DESC")
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "employee", orphanRemoval = true, fetch = FetchType.EAGER)
-	private Set<Salary> salaryHistory;
+	private List<Salary> salaryHistory;
 
 	@Getter
 	@Setter
+	@OrderBy("fromDate DESC")
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "employee", orphanRemoval = true, fetch = FetchType.EAGER)
-	private Set<Title> titleHistory;
+	private List<Title> titleHistory;
 
 	@Getter
+	@OrderBy("fromDate DESC")
 	@OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<DepartmentAssignment> departmentHistory = new ArrayList<>();
+	private List<DepartmentAssignment> departmentHistory = new ArrayList<>();
 
 }

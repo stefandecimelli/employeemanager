@@ -15,6 +15,8 @@ import com.decimelli.management.employeemanager.service.DepartmentService;
 import com.decimelli.management.employeemanager.service.EmployeeService;
 import com.decimelli.management.employeemanager.service.ManagerService;
 
+import jakarta.transaction.Transactional;
+
 @SpringBootTest
 class EmployeemanagerApplicationTests {
 
@@ -36,8 +38,57 @@ class EmployeemanagerApplicationTests {
 	@Autowired
 	DepartmentService departmentService;
 
-	@Test
-	public void testEmployeeLifecycle() {
+	/**
+	 * The full employee object should look something like this:
+	 * 
+	 * Employee(
+	 * id=10192459,
+	 * birthDate=1977-01-29,
+	 * firstName=Stefan,
+	 * lastName=Decimelli,
+	 * gender=M,
+	 * hireDate=1999-01-02,
+	 * salaryHistory=[
+	 * Salary(
+	 * salary=50000,
+	 * fromDate=2004-07-07,
+	 * toDate=2024-08-29
+	 * ),
+	 * Salary(
+	 * salary=40000,
+	 * fromDate=1999-01-02,
+	 * toDate=2004-07-07
+	 * )
+	 * ],
+	 * titleHistory=[
+	 * Title(
+	 * title=Software Developer,
+	 * fromDate=1999-01-02,
+	 * toDate=2004-07-07
+	 * ),
+	 * Title(
+	 * title=Software Development Manager,
+	 * fromDate=2004-07-07,
+	 * toDate=2024-08-29
+	 * )
+	 * ],
+	 * departmentHistory=[
+	 * (
+	 * department=R&D,
+	 * fromDate=2004-07-07,
+	 * toDate=2024-08-29
+	 * ),
+	 * (
+	 * department=Software Development,
+	 * fromDate=1999-01-02,
+	 * toDate=2004-07-07
+	 * )
+	 * ]
+	 * )
+	 * 
+	 */
+	@Transactional
+	private Employee createEmployeeAndSimulate() throws Exception {
 		Department department;
 		Employee employee;
 
@@ -89,57 +140,42 @@ class EmployeemanagerApplicationTests {
 
 		// FINAL
 
-		employees.getEmployeeByName("Stefan", "Decimelli", null)
-				.forEach(System.out::println);
-
-		/**
-		 * The full employee object should look something like this:
-		 * 
-		 * Employee(
-		 * id=10192459,
-		 * birthDate=1977-01-29,
-		 * firstName=Stefan,
-		 * lastName=Decimelli,
-		 * gender=M,
-		 * hireDate=1999-01-02,
-		 * salaryHistory=[
-		 * Salary(
-		 * salary=50000,
-		 * fromDate=2004-07-07,
-		 * toDate=2024-08-29
-		 * ),
-		 * Salary(
-		 * salary=40000,
-		 * fromDate=1999-01-02,
-		 * toDate=2004-07-07
-		 * )
-		 * ],
-		 * titleHistory=[
-		 * Title(
-		 * title=Software Developer,
-		 * fromDate=1999-01-02,
-		 * toDate=2004-07-07
-		 * ),
-		 * Title(
-		 * title=Software Development Manager,
-		 * fromDate=2004-07-07,
-		 * toDate=2024-08-29
-		 * )
-		 * ],
-		 * departmentHistory=[
-		 * (
-		 * department=R&D,
-		 * fromDate=2004-07-07,
-		 * toDate=2024-08-29
-		 * ),
-		 * (
-		 * department=Software Development,
-		 * fromDate=1999-01-02,
-		 * toDate=2004-07-07
-		 * )
-		 * ]
-		 * )
-		 * 
-		 */
+		return employees.getEmployeeByName("Stefan", "Decimelli", null).get(0);
 	}
+
+	@Test
+	public void testEmployeeLifecycle() throws Exception {
+		Employee employee = createEmployeeAndSimulate();
+
+		assertEquals(Date.valueOf("1977-1-29"), employee.getBirthDate());
+		assertEquals("Stefan", employee.getFirstName());
+		assertEquals("Decimelli", employee.getLastName());
+		assertEquals(10192459, employee.getId());
+		assertEquals(Date.valueOf("1999-01-02"), employee.getHireDate());
+		assertEquals('M', employee.getGender());
+
+		assertEquals(2, employee.getSalaryHistory().size());
+		assertEquals(2, employee.getTitleHistory().size());
+		assertEquals(2, employee.getDepartmentHistory().size());
+
+		assertEquals(employee, employee.getSalaryHistory().get(0).getEmployee());
+		assertEquals(50000, employee.getSalaryHistory().get(0).getSalary());
+		assertEquals(employee, employee.getTitleHistory().get(0).getEmployee());
+		assertEquals("Software Development Manager", employee.getTitleHistory().get(0).getTitle());
+		assertEquals(employee, employee.getDepartmentHistory().get(0).getEmployee());
+		assertEquals("R&D", employee.getDepartmentHistory().get(0).getDepartment().getName());
+
+		assertEquals(employee, employee.getSalaryHistory().get(1).getEmployee());
+		assertEquals(40000, employee.getSalaryHistory().get(1).getSalary());
+		assertEquals(employee.getTitleHistory().get(1).getEmployee(), employee);
+		assertEquals("Software Developer", employee.getTitleHistory().get(1).getTitle());
+		assertEquals(employee, employee.getDepartmentHistory().get(1).getEmployee());
+		assertEquals("Software Development", employee.getDepartmentHistory().get(1).getDepartment().getName());
+
+		assertEquals(employee.getDepartmentHistory().get(0).getDepartment().getName(),
+				managements.getManagedDepartmentHistory(employee).get(0).getDepartment().getName());
+		assertEquals(employee.getDepartmentHistory().get(0).getDepartment().getId(),
+				managements.getManagedDepartmentHistory(employee).get(0).getDepartment().getId());
+	}
+
 }

@@ -1,8 +1,7 @@
 package com.decimelli.management.employeemanager.service;
 
 import java.sql.Date;
-import java.util.HashSet;
-
+import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +10,8 @@ import com.decimelli.management.employeemanager.model.Employee;
 import com.decimelli.management.employeemanager.model.Salary;
 import com.decimelli.management.employeemanager.model.Title;
 import com.decimelli.management.employeemanager.repository.EmployeeRepository;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class EmployeeService {
@@ -45,9 +46,10 @@ public class EmployeeService {
 		setNewSalary(employee, newSalaryValue, startDate, Date.valueOf("9999-1-1"));
 	}
 
+	@Transactional
 	public void setNewSalary(Employee employee, int newSalaryValue, Date from, Date to) {
 		if (employee.getSalaryHistory() == null) {
-			employee.setSalaryHistory(new HashSet<>());
+			employee.setSalaryHistory(new ArrayList<>());
 		}
 		Salary newSalary = new Salary();
 		newSalary.setFromDate(from);
@@ -71,7 +73,7 @@ public class EmployeeService {
 
 	public void setNewTitle(Employee employee, String newTitleName, Date from, Date to) {
 		if (employee.getTitleHistory() == null) {
-			employee.setTitleHistory(new HashSet<>());
+			employee.setTitleHistory(new ArrayList<>());
 		}
 		Title newSalary = new Title();
 		newSalary.setFromDate(from);

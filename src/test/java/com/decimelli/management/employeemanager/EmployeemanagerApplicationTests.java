@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.sql.Date;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.decimelli.management.employeemanager.model.Department;
@@ -18,6 +19,7 @@ import com.decimelli.management.employeemanager.service.ManagerService;
 import jakarta.transaction.Transactional;
 
 @SpringBootTest
+@AutoConfigureTestDatabase // uses com.h2database.h2 by default
 class EmployeemanagerApplicationTests {
 
 	@Autowired
@@ -144,7 +146,7 @@ class EmployeemanagerApplicationTests {
 	}
 
 	@Test
-	public void testEmployeeLifecycle() throws Exception {
+	public void testEmployeeLifecycleFullFVT() throws Exception {
 		Employee employee = createEmployeeAndSimulate();
 
 		assertEquals(Date.valueOf("1977-1-29"), employee.getBirthDate());
@@ -176,6 +178,8 @@ class EmployeemanagerApplicationTests {
 				managements.getManagedDepartmentHistory(employee).get(0).getDepartment().getName());
 		assertEquals(employee.getDepartmentHistory().get(0).getDepartment().getId(),
 				managements.getManagedDepartmentHistory(employee).get(0).getDepartment().getId());
+
+		assertEquals(Date.valueOf("2024-08-29"), employee.getSalaryHistory().get(0).getToDate());
 	}
 
 }
